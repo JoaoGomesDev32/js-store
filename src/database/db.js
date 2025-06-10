@@ -4,9 +4,7 @@ const connectDatabase = () => {
   console.log("Connecting to the database...");
 
   mongoose
-    .connect(
-      "mongodb+srv://joaogomesdev32:05012022@cluster0.kxlzecc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-    )
+    .connect(process.env.MONGODB_URI)
     .then(() => {
       console.log("MongoDB connected successfully!");
     })
