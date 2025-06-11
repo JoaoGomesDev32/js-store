@@ -10,13 +10,19 @@ const login = async (req, res) => {
       return res.status(401).send({ message: "User or password not found" });
     }
 
-    const passwordIsValid = bcrypt.compareSync(password, user.password);
+    if (!password) {
+      return res.status(400).send({ message: "Password is required" });
+    }
+
+    const passwordIsValid = await bcrypt.compare(password, user.password);
 
     if (!passwordIsValid) {
       return res.status(401).send({ message: "User or password not found" });
     }
 
-    res.send({ user });
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    res.send({ user: userWithoutPassword });
   } catch (err) {
     res.status(500).send(err.message);
   }
