@@ -1,19 +1,44 @@
 import { createService, findAllService } from "../services/products.service.js";
 
-export async function create(req, res) {
+const create = async (req, res) => {
   try {
-    const product = await createService(req.body);
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(500).json({ message: "Erro ao criar produto", error });
-  }
-}
+    const { name, description, price, imageUrl, category, stockQuantity } =
+      req.body;
 
-export async function findAll(req, res) {
-  try {
-    const products = await findAllService();
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ message: "Erro ao buscar produtos", error });
+    if (
+      !name ||
+      !description ||
+      !price ||
+      !imageUrl ||
+      !category ||
+      stockQuantity === undefined
+    ) {
+      return res
+        .status(400)
+        .send({ message: "Todos os campos são obrigatórios" });
+    }
+
+    await createService({
+      name,
+      description,
+      price,
+      imageUrl,
+      category,
+      stockQuantity,
+    });
+
+    res.send(201);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
-}
+};
+
+const findAll = async (req, res) => {
+  const Product = await findAllService();
+  if (Product.length === 0) {
+    return res.status(500).send({ message: "Erro ao recuperar produtos" });
+  }
+  res.send(Product);
+};
+
+export { create, findAll };

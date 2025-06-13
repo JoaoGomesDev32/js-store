@@ -1,10 +1,7 @@
 import Product from "../models/Product.js";
 
-export async function createService(productData) {
-  const product = new Product(productData);
-  return await product.save();
-}
+const createService = (body) => Product.create(body);
 
-export async function findAllService() {
-  return await Product.find();
-}
+const findAllService = () => Product.find();
+
+export { createService, findAllService };
