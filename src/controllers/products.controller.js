@@ -2,6 +2,24 @@ import { createService, findAllService } from "../services/products.service.js";
 
 const create = async (req, res) => {
   try {
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      return res.send(401);
+    }
+
+    const parts = authorization.split(" ");
+
+    if (parts.length !== 2) {
+      return res.send(401);
+    }
+
+    const [schema, token] = parts;
+
+    if (schema !== "Bearer") {
+      return res.send(401);
+    }
+
     const { name, description, price, imageUrl, category, stockQuantity } =
       req.body;
 
