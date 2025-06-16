@@ -1,5 +1,8 @@
 import bcrypt from "bcryptjs";
 import { loginService, generateToken } from "../services/auth.service.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -22,7 +25,13 @@ const login = async (req, res) => {
 
     const { password: _, ...userWithoutPassword } = user.toObject();
 
-    const token = generateToken(user.id);
+    const secret = process.env.SECRET_JWT;
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.SECRET_JWT, // aqui deve ser a chave secreta
+      { expiresIn: "1d" }
+    );
 
     res.send({ token });
   } catch (err) {
