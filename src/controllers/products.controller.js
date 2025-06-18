@@ -1,4 +1,8 @@
-import { createService, findAllService } from "../services/products.service.js";
+import {
+  createService,
+  findAllService,
+  countProductsService,
+} from "../services/products.service.js";
 
 const create = async (req, res) => {
   try {
@@ -35,11 +39,34 @@ const create = async (req, res) => {
 };
 
 const findAll = async (req, res) => {
-  const Product = await findAllService();
-  if (Product.length === 0) {
-    return res.status(500).send({ message: "Erro ao recuperar produtos" });
+  try {
+    const page = parseInt(req.query.page) || 1; // <-- Definindo page
+    const limit = parseInt(req.query.limit) || 10; // <-- Definindo limit
+    const skip = (page - 1) * limit;
+
+    // Supondo que seu service aceite skip e limit:
+    const products = await findAllService(skip, limit);
+    const total = await countProductsService();
+    const totalPages = Math.ceil(total / limit);
+
+    const baseUrl = `${req.protocol}://${req.get("host")}${req.baseUrl}${
+      req.path
+    }`;
+    const nextUrl =
+      page < totalPages ? `${baseUrl}?page=${page + 1}&limit=${limit}` : null;
+
+    res.status(200).json({
+      products,
+      total,
+      page,
+      totalPages,
+      nextUrl,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erro ao buscar produtos", error: error.message });
   }
-  res.send(Product);
 };
 
 export { create, findAll };

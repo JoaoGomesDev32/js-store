@@ -2,6 +2,11 @@ import Product from "../models/Product.js";
 
 const createService = (body) => Product.create(body);
 
-const findAllService = () => Product.find();
+const findAllService = (offset, limit) =>
+  Product.find().sort({ _id: -1 }).skip(offset).limit(limit);
 
-export { createService, findAllService };
+const countProductsService = async () => {
+  return await Product.countDocuments();
+};
+
+export { createService, findAllService, countProductsService };
