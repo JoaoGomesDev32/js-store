@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import userRoute from "./src/routes/user.route.js";
 import authRoute from "./src/routes/auth.route.js";
 import productsRoute from "./src/routes/products.route.js";
+import cartRoute from "./src/routes/cart.route.js";
+import orderRoute from "./src/routes/order.route.js";
 
 dotenv.config();
 
@@ -16,5 +18,7 @@ app.use(express.json());
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/products", productsRoute);
+app.use("/cart", cartRoute);
+app.use("/orders", orderRoute);
 
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
