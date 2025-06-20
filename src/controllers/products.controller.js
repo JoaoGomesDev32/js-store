@@ -6,14 +6,15 @@ import {
 
 const create = async (req, res) => {
   try {
-    const { name, description, price, imageUrl, category, stockQuantity } =
-      req.body;
+    const { name, description, price, images, category, stockQuantity } = req.body;
 
     if (
       !name ||
       !description ||
       !price ||
-      !imageUrl ||
+      !images ||
+      !Array.isArray(images) ||
+      images.length === 0 ||
       !category ||
       stockQuantity === undefined
     ) {
@@ -22,17 +23,21 @@ const create = async (req, res) => {
         .send({ message: "Todos os campos são obrigatórios" });
     }
 
-    await createService({
+    const product = await createService({
       name,
       description,
       price,
-      imageUrl,
+      images,
       category,
       stockQuantity,
       user: req.userId,
     });
 
-    res.send(201);
+    if (!product) {
+      return res.status(500).send({ message: "Erro ao criar produto" });
+    }
+
+    res.status(201).json(product);
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

@@ -2,68 +2,30 @@ import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0, // Ensure price is not negative
-    },
-    imageUrl: {
-      type: String,
-      required: true,
-    },
-    category: {
-      type: String,
-      required: true,
-    },
-    stockQuantity: {
-      type: Number,
-      default: 0, // Default to zero if not specified
-    },
-    rating: {
-      type: Number,
-      default: 0, // Default rating
-      min: 0, // Minimum rating
-      max: 5, // Maximum rating
-    },
-    numReviews: {
-      type: Number,
-      default: 0, // Default number of reviews
-    },
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true, min: 0 },
+    discountPrice: { type: Number, min: 0 },
+    images: { type: [String], default: [] },
+    brand: { type: String },
+    category: { type: String, required: true },
+    stockQuantity: { type: Number, default: 0 },
+    sku: { type: String, unique: true, sparse: true },
+    isFeatured: { type: Boolean, default: false },
+    tags: { type: [String], default: [] },
+    sold: { type: Number, default: 0 },
+    rating: { type: Number, default: 0, min: 0, max: 5 },
+    numReviews: { type: Number, default: 0 },
     reviews: [
       {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User", // Reference to User model
-          required: true,
-        },
-        comment: {
-          type: String,
-          required: true,
-        },
-        rating: {
-          type: Number,
-          required: true,
-          min: 1, // Minimum rating
-          max: 5, // Maximum rating
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now, // Automatically set the date when review is created
-        },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+        comment: { type: String, required: true },
+        rating: { type: Number, required: true, min: 1, max: 5 },
+        createdAt: { type: Date, default: Date.now },
       },
     ],
   },
-  {
-    timestamps: true, // Automatically manage createdAt and updatedAt fields
-  }
+  { timestamps: true }
 );
 
 const Product = mongoose.model("Product", ProductSchema);
