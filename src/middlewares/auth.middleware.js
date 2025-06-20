@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 dotenv.config();
 
-export const authMiddleware = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   try {
     const { authorization } = req.headers;
 
@@ -35,7 +35,7 @@ export const authMiddleware = (req, res, next) => {
         return res.status(401).send({ message: "Invalid token!" });
       }
 
-      req.userId = decoded.user.id;
+      req.userId = decoded.id;
 
       return next();
     });
@@ -43,3 +43,5 @@ export const authMiddleware = (req, res, next) => {
     res.status(500).send(err.message);
   }
 };
+
+export default authMiddleware;

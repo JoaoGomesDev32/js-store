@@ -2,14 +2,14 @@ import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
 
 export const getCart = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const cart = await Cart.findOne({ userId }).populate("products.productId");
   if (!cart) return res.json({ products: [] });
   res.json(cart);
 };
 
 export const addToCart = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const { productId, quantity } = req.body;
   let cart = await Cart.findOne({ userId });
   if (!cart) cart = await Cart.create({ userId, products: [] });
@@ -24,7 +24,7 @@ export const addToCart = async (req, res) => {
 };
 
 export const updateCartItem = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const { productId, quantity } = req.body;
   const cart = await Cart.findOne({ userId });
   if (!cart) return res.status(404).json({ error: "Carrinho não encontrado" });
@@ -36,7 +36,7 @@ export const updateCartItem = async (req, res) => {
 };
 
 export const removeFromCart = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const { productId } = req.body;
   const cart = await Cart.findOne({ userId });
   if (!cart) return res.status(404).json({ error: "Carrinho não encontrado" });
@@ -46,7 +46,7 @@ export const removeFromCart = async (req, res) => {
 };
 
 export const clearCart = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const cart = await Cart.findOne({ userId });
   if (!cart) return res.status(404).json({ error: "Carrinho não encontrado" });
   cart.products = [];

@@ -3,7 +3,7 @@ import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
 
 export const createOrder = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const { address } = req.body;
   const cart = await Cart.findOne({ userId });
   if (!cart || cart.products.length === 0) return res.status(400).json({ error: "Carrinho vazio" });
@@ -26,7 +26,7 @@ export const createOrder = async (req, res) => {
 };
 
 export const getUserOrders = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const orders = await Order.find({ userId });
   res.json(orders);
 };
