@@ -13,9 +13,14 @@ const topProductsService = async () => {
   return await Product.find().sort({ price: -1 }).limit(10);
 };
 
+const findByIdService = async (id) => {
+  return await Product.findById(id);
+};
+
 export {
   createService,
   findAllService,
   countProductsService,
   topProductsService,
+  findByIdService,
 };

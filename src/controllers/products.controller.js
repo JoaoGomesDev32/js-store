@@ -3,6 +3,7 @@ import {
   findAllService,
   countProductsService,
   topProductsService,
+  findByIdService,
 } from "../services/products.service.js";
 
 const create = async (req, res) => {
@@ -93,4 +94,23 @@ const topProducts = async (req, res) => {
   }
 };
 
-export { create, findAll, topProducts };
+const findById = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await findByIdService({ _id: productId });
+
+    if (!product) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+
+    res.send({
+      product,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erro ao buscar produto", error: error.message });
+  }
+};
+
+export { create, findAll, topProducts, findById };
