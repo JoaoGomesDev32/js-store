@@ -9,4 +9,13 @@ const countProductsService = async () => {
   return await Product.countDocuments();
 };
 
-export { createService, findAllService, countProductsService };
+const topProductsService = async () => {
+  return await Product.find().sort({ price: -1 }).limit(10);
+};
+
+export {
+  createService,
+  findAllService,
+  countProductsService,
+  topProductsService,
+};

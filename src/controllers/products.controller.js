@@ -2,11 +2,13 @@ import {
   createService,
   findAllService,
   countProductsService,
+  topProductsService,
 } from "../services/products.service.js";
 
 const create = async (req, res) => {
   try {
-    const { name, description, price, images, category, stockQuantity } = req.body;
+    const { name, description, price, images, category, stockQuantity } =
+      req.body;
 
     if (
       !name ||
@@ -74,4 +76,21 @@ const findAll = async (req, res) => {
   }
 };
 
-export { create, findAll };
+const topProducts = async (req, res) => {
+  try {
+    const products = await topProductsService(0, 10); // Exemplo de busca dos 10 primeiros produtos
+    if (!products || products.length === 0) {
+      return res.status(404).json({ message: "Nenhum produto encontrado" });
+    }
+
+    res.send({
+      products,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erro ao buscar produtos", error: error.message });
+  }
+};
+
+export { create, findAll, topProducts };
