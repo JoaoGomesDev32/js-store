@@ -17,10 +17,16 @@ const findByIdService = async (id) => {
   return await Product.findById(id);
 };
 
+const searchByNameService = (name) =>
+  Product.find({
+    name: { $regex: name, $options: "i" },
+  }).sort({ _id: -1 });
+
 export {
   createService,
   findAllService,
   countProductsService,
   topProductsService,
   findByIdService,
+  searchByNameService,
 };

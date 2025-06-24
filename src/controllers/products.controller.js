@@ -4,6 +4,7 @@ import {
   countProductsService,
   topProductsService,
   findByIdService,
+  searchByNameService,
 } from "../services/products.service.js";
 
 const create = async (req, res) => {
@@ -113,4 +114,23 @@ const findById = async (req, res) => {
   }
 };
 
-export { create, findAll, topProducts, findById };
+const searchByName = async (req, res) => {
+  try {
+    const { name } = req.query;
+    if (!name) {
+      return res.status(400).json({ message: "Nome não informado" });
+    }
+    const products = await searchByNameService(name);
+
+    if (!products.length) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+    res.status(200).json(products);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erro ao buscar produto", error: error.message });
+  }
+};
+
+export { create, findAll, topProducts, findById, searchByName };
