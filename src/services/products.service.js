@@ -22,6 +22,10 @@ const searchByNameService = (name) =>
     name: { $regex: name, $options: "i" },
   }).sort({ _id: -1 });
 
+const updateService = async (_id, body) => {
+  return await Product.findByIdAndUpdate(productId, updates, { new: true });
+};
+
 export {
   createService,
   findAllService,
@@ -29,4 +33,5 @@ export {
   topProductsService,
   findByIdService,
   searchByNameService,
+  updateService,
 };

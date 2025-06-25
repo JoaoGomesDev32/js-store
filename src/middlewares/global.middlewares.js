@@ -33,4 +33,22 @@ const validUser = async (req, res, next) => {
   }
 };
 
-export { validId, validUser };
+const validProduct = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const product = await productService.findByIdService(id);
+
+    if (!product) {
+      return res.status(404).send({ message: "Product not found" });
+    }
+
+    req.id = id;
+    req.product = product;
+
+    next();
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+export { validId, validUser, validProduct };

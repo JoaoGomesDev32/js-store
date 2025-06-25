@@ -1,3 +1,4 @@
+import Product from "../models/Product.js";
 import {
   createService,
   findAllService,
@@ -133,4 +134,39 @@ const searchByName = async (req, res) => {
   }
 };
 
-export { create, findAll, topProducts, findById, searchByName };
+const update = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const updates = req.body;
+
+    if (
+      !updates.name &&
+      !updates.description &&
+      !updates.price &&
+      !updates.images &&
+      !updates.category &&
+      updates.stockQuantity === undefined
+    ) {
+      return res.status(400).json({ message: "Nenhum campo para atualizar" });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId, updates, {
+      new: true,
+    });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+
+    res.status(200).json({
+      message: "Produto atualizado com sucesso",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erro ao atualizar produto", error: error.message });
+  }
+};
+
+export { create, findAll, topProducts, findById, searchByName, update };
