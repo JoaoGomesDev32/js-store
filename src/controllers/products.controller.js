@@ -169,4 +169,24 @@ const update = async (req, res) => {
   }
 };
 
-export { create, findAll, topProducts, findById, searchByName, update };
+const erase = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const deletedProduct = await Product.findByIdAndDelete(productId);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+
+    res.status(200).json({
+      message: "Produto excluído com sucesso",
+      product: deletedProduct,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erro ao excluir produto", error: error.message });
+  }
+};
+
+export { create, findAll, topProducts, findById, searchByName, update, erase };

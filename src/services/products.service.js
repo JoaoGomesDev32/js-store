@@ -26,6 +26,10 @@ const updateService = async (_id, body) => {
   return await Product.findByIdAndUpdate(productId, updates, { new: true });
 };
 
+const eraseService = async (id) => {
+  return await Product.findByIdAndDelete(id);
+};
+
 export {
   createService,
   findAllService,
@@ -34,4 +38,5 @@ export {
   findByIdService,
   searchByNameService,
   updateService,
+  eraseService,
 };

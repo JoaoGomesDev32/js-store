@@ -8,6 +8,7 @@ import {
   topProducts,
   searchByName,
   update,
+  erase,
 } from "../controllers/products.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import adminMiddleware from "../middlewares/admin.middleware.js";
@@ -18,5 +19,6 @@ router.get("/top", topProducts);
 router.get("/search", searchByName);
 router.get("/:id", findById);
 router.patch("/:id", authMiddleware, adminMiddleware, update);
+router.delete("/:id", authMiddleware, adminMiddleware, erase);
 
 export default router;
