@@ -9,6 +9,7 @@ import {
   searchByName,
   update,
   erase,
+  addReview,
 } from "../controllers/products.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import adminMiddleware from "../middlewares/admin.middleware.js";
@@ -20,5 +21,6 @@ router.get("/search", searchByName);
 router.get("/:id", findById);
 router.patch("/:id", authMiddleware, adminMiddleware, update);
 router.delete("/:id", authMiddleware, adminMiddleware, erase);
+router.post("/:id/review", authMiddleware, addReview);
 
 export default router;

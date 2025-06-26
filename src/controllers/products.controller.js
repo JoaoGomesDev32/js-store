@@ -6,6 +6,9 @@ import {
   topProductsService,
   findByIdService,
   searchByNameService,
+  updateService,
+  eraseService,
+  addReviewService,
 } from "../services/products.service.js";
 
 const create = async (req, res) => {
@@ -189,4 +192,37 @@ const erase = async (req, res) => {
   }
 };
 
-export { create, findAll, topProducts, findById, searchByName, update, erase };
+const addReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment, rating } = req.body;
+    const userId = req.userId;
+
+    if (!comment || !rating) {
+      return res
+        .status(400)
+        .json({ message: "Comentário e nota são obrigatórios" });
+    }
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "Nota deve ser entre 1 e 5" });
+    }
+
+    const product = await addReviewService(id, userId, comment, rating);
+    res
+      .status(201)
+      .json({ message: "Avaliação adicionada com sucesso", product });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export {
+  create,
+  findAll,
+  topProducts,
+  findById,
+  searchByName,
+  update,
+  erase,
+  addReview,
+};

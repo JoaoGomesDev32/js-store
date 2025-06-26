@@ -30,6 +30,27 @@ const eraseService = async (id) => {
   return await Product.findByIdAndDelete(id);
 };
 
+const addReviewService = async (productId, userId, comment, rating) => {
+  const product = await Product.findById(productId);
+  if (!product) throw new Error("Produto não encontrado");
+
+  // Verifica se o usuário já avaliou
+  const alreadyReviewed = product.reviews.find(
+    (r) => r.userId.toString() === userId
+  );
+  if (alreadyReviewed) throw new Error("Você já avaliou este produto");
+
+  product.reviews.push({ userId, comment, rating });
+
+  // Atualiza média e número de reviews
+  product.numReviews = product.reviews.length;
+  product.rating =
+    product.reviews.reduce((acc, r) => acc + r.rating, 0) / product.numReviews;
+
+  await product.save();
+  return product;
+};
+
 export {
   createService,
   findAllService,
@@ -39,4 +60,5 @@ export {
   searchByNameService,
   updateService,
   eraseService,
+  addReviewService,
 };
