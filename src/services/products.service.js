@@ -51,6 +51,35 @@ const addReviewService = async (productId, userId, comment, rating) => {
   return product;
 };
 
+const deleteReviewService = async (productId, userId, reviewId) => {
+  const product = await Product.findById(productId);
+  if (!product) throw new Error("Produto não encontrado");
+
+  // Encontra o review
+  const review = product.reviews.id(reviewId);
+  if (!review) throw new Error("Comentário não encontrado");
+
+  if (review.userId.toString() !== userId) {
+    throw new Error("Você só pode deletar seu próprio comentário");
+  }
+
+  // Remove o review usando filter
+  product.reviews = product.reviews.filter(
+    (r) => r._id.toString() !== reviewId
+  );
+
+  // Atualiza média e número de reviews
+  product.numReviews = product.reviews.length;
+  product.rating =
+    product.numReviews > 0
+      ? product.reviews.reduce((acc, r) => acc + r.rating, 0) /
+        product.numReviews
+      : 0;
+
+  await product.save();
+  return product;
+};
+
 export {
   createService,
   findAllService,
@@ -61,4 +90,5 @@ export {
   updateService,
   eraseService,
   addReviewService,
+  deleteReviewService,
 };

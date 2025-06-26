@@ -9,6 +9,7 @@ import {
   updateService,
   eraseService,
   addReviewService,
+  deleteReviewService,
 } from "../services/products.service.js";
 
 const create = async (req, res) => {
@@ -216,6 +217,20 @@ const addReview = async (req, res) => {
   }
 };
 
+const deleteReview = async (req, res) => {
+  try {
+    const { id, reviewId } = req.params;
+    const userId = req.userId;
+
+    const product = await deleteReviewService(id, userId, reviewId);
+    res
+      .status(200)
+      .json({ message: "Comentário removido com sucesso", product });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export {
   create,
   findAll,
@@ -225,4 +240,5 @@ export {
   update,
   erase,
   addReview,
+  deleteReview,
 };
