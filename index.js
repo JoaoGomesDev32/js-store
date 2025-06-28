@@ -7,6 +7,7 @@ import authRoute from "./src/routes/auth.route.js";
 import productsRoute from "./src/routes/products.route.js";
 import cartRoute from "./src/routes/cart.route.js";
 import orderRoute from "./src/routes/order.route.js";
+import swaggerRoute from "./src/routes/swagger.route.js";
 
 dotenv.config();
 
@@ -20,5 +21,6 @@ app.use("/auth", authRoute);
 app.use("/products", productsRoute);
 app.use("/cart", cartRoute);
 app.use("/orders", orderRoute);
+app.use("/api-docs", swaggerRoute);
 
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
