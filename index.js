@@ -16,7 +16,7 @@ const app = express();
 
 connectDatabase();
 app.use(express.json());
-app.use("/user", userRoute);
+app.use("/users", userRoute);
 app.use("/auth", authRoute);
 app.use("/products", productsRoute);
 app.use("/cart", cartRoute);
